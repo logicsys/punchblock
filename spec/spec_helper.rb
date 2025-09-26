@@ -1,12 +1,13 @@
 # encoding: utf-8
 
+require 'coveralls'
+Coveralls.wear!
+
 require 'punchblock'
 require 'countdownlatch'
 require 'logger'
 require 'celluloid'
-require 'coveralls'
 require 'ruby_ami'
-Coveralls.wear!
 
 Dir[File.dirname(__FILE__) + "/support/**/*.rb"].each {|f| require f}
 
@@ -17,7 +18,10 @@ RSpec.configure do |config|
   config.run_all_when_everything_filtered = true
 
   config.mock_with :rspec do |mocks|
-    mocks.add_stub_and_should_receive_to Celluloid::AbstractProxy
+    # Celluloid::AbstractProxy was removed in newer versions
+    if defined?(Celluloid::AbstractProxy)
+      mocks.add_stub_and_should_receive_to Celluloid::AbstractProxy
+    end
   end
 
   config.before :suite do |variable|
@@ -31,9 +35,19 @@ RSpec.configure do |config|
   end
 
   config.after :each do
-    if defined?(:Celluloid)
-      Celluloid.shutdown
-      Celluloid.boot
+    if defined?(Celluloid)
+      if Celluloid.respond_to?(:running?) && Celluloid.running?
+        Celluloid.shutdown
+        Celluloid.boot
+      elsif !Celluloid.respond_to?(:running?)
+        # Older Celluloid versions don't have running? method
+        begin
+          Celluloid.shutdown
+          Celluloid.boot
+        rescue Celluloid::Error
+          # Already shutdown, ignore
+        end
+      end
     end
   end
 end
