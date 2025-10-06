@@ -25,8 +25,8 @@ module Punchblock
         ami_client.terminate
       end
 
-      def write(command, options)
-        translator.async.execute_command command, options
+      def write(command, **options)
+        translator.async.execute_command command, **options
       end
 
       def send_message(*args)
@@ -38,7 +38,7 @@ module Punchblock
       end
 
       def new_ami_stream
-        stream = RubyAMI::Stream.new(*@stream_options, ->(event) { translator.async.handle_ami_event event }, pb_logger)
+        stream = RubyAMI::Stream.new(*@stream_options, ->(*args) { translator.async.handle_ami_event args.first }, pb_logger)
         client = (ami_client || RubyAMIStreamProxy.new(stream))
         client.stream = stream
         client

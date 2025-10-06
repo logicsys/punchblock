@@ -46,14 +46,14 @@ module Punchblock
       component_registry.delete component
     end
 
-    def execute_command(command, options = {})
+    def execute_command(command, **options)
       command.client = self
       if command.respond_to?(:register_handler)
         command.register_handler :internal do |event|
           trigger_handler :event, event
         end
       end
-      connection.write command, options
+      connection.write command, **options
     end
   end
 end

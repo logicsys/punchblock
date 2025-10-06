@@ -30,7 +30,7 @@ module Punchblock
               @call.execute_agi_command 'STREAM FILE', 'beep', '""'
             end
 
-            ami_client.send_action 'Monitor', 'Channel' => call.channel, 'File' => filename, 'Format' => @format, 'Mix' => true
+            ami_client.send_action('Monitor', 'Channel' => call.channel, 'File' => filename, 'Format' => @format, 'Mix' => true)
             unless max_duration == -1
               call.after max_duration/1000 do
                 stop
@@ -50,13 +50,13 @@ module Punchblock
             case command
             when Punchblock::Component::Stop
               command.response = true
-              ami_client.send_action 'StopMonitor', 'Channel' => call.channel
+              ami_client.send_action('StopMonitor', 'Channel' => call.channel)
               @complete_reason = stop_reason
             when Punchblock::Component::Record::Pause
-              ami_client.send_action 'PauseMonitor', 'Channel' => call.channel
+              ami_client.send_action('PauseMonitor', 'Channel' => call.channel)
               command.response = true
             when Punchblock::Component::Record::Resume
-              ami_client.send_action 'ResumeMonitor', 'Channel' => call.channel
+              ami_client.send_action('ResumeMonitor', 'Channel' => call.channel)
               command.response = true
             else
               super
@@ -71,7 +71,7 @@ module Punchblock
 
           def stop
             AMIErrorConverter.convert(nil) do
-              ami_client.send_action 'StopMonitor', 'Channel' => call.channel
+              ami_client.send_action('StopMonitor', 'Channel' => call.channel)
             end
           end
 

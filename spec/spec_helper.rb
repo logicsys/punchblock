@@ -27,11 +27,26 @@ RSpec.configure do |config|
   config.before :suite do |variable|
     Punchblock.logger = Logger.new(STDOUT)
     Punchblock.logger.define_singleton_method :trace, Punchblock.logger.method(:debug)
+    # Boot Celluloid for tests that need it
+    Celluloid.boot if defined?(Celluloid) && !Celluloid.respond_to?(:running?) || !Celluloid.running?
   end
 
   config.before do
     @uuid = SecureRandom.uuid
     allow(Punchblock).to receive_messages new_request_id: @uuid
+    # Ensure Celluloid is booted for each test
+    if defined?(Celluloid)
+      if Celluloid.respond_to?(:running?) && !Celluloid.running?
+        Celluloid.boot
+      elsif !Celluloid.respond_to?(:running?)
+        # Older Celluloid versions don't have running? method, try to boot if not already
+        begin
+          Celluloid.boot
+        rescue Celluloid::Error
+          # Already booted, ignore
+        end
+      end
+    end
   end
 
   config.after :each do

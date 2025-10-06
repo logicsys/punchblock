@@ -124,7 +124,7 @@ module Punchblock
         call.send_message body if call
       end
 
-      def execute_command(command, options = {})
+      def execute_command(command, **options)
         command.request!
 
         command.target_call_id ||= options[:call_id]

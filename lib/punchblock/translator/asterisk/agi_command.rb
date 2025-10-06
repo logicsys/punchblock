@@ -17,7 +17,7 @@ module Punchblock
 
         # @raises RubyAMI::Error, ChannelGoneError
         def execute(ami_client)
-          AMIErrorConverter.convert { ami_client.send_action 'AGI', 'Channel' => @channel, 'Command' => agi_command, 'CommandID' => id }
+          AMIErrorConverter.convert { ami_client.send_action('AGI', 'Channel' => @channel, 'Command' => agi_command, 'CommandID' => id) }
         end
 
         def parse_result(event)

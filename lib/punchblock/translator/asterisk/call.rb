@@ -338,16 +338,16 @@ module Punchblock
         private
 
         def fetch_channel_var(variable)
-          result = @ami_client.send_action 'GetVar', 'Channel' => channel, 'Variable' => variable
+          result = @ami_client.send_action('GetVar', 'Channel' => channel, 'Variable' => variable)
           result['Value'] == '(null)' ? nil : result['Value']
         end
 
         def send_hangup_command(cause_code = 16)
-          send_ami_action 'Hangup', 'Channel' => channel, 'Cause' => cause_code
+          send_ami_action('Hangup', {'Channel' => channel, 'Cause' => cause_code})
         end
 
         def send_ami_action(name, headers = {})
-          AMIErrorConverter.convert { @ami_client.send_action name, headers }
+          AMIErrorConverter.convert { @ami_client.send_action(name, headers) }
         end
 
         def send_end_event(reason, code = nil, timestamp = nil)

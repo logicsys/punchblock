@@ -43,8 +43,8 @@ module Punchblock
         super()
       end
 
-      def write(command, options = {})
-        iq = prep_command_for_execution command, options
+      def write(command, **options)
+        iq = prep_command_for_execution command, **options
         command.request!
         client.write_with_handler iq do |response|
           if response.result?
@@ -55,7 +55,7 @@ module Punchblock
         end
       end
 
-      def prep_command_for_execution(command, options = {})
+      def prep_command_for_execution(command, **options)
         command.connection    = self
         command.target_call_id    ||= options[:call_id]
         command.target_mixer_name ||= options[:mixer_name]
