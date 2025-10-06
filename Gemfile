@@ -3,3 +3,4 @@ gemspec
 
 gem 'bluecloth' unless RUBY_PLATFORM =~ /java/
 gem 'ruby_ami', github: "logicsys/ruby_ami", branch: "develop"
+gem 'blather', github: "logicsys/blather", branch: "develop"
