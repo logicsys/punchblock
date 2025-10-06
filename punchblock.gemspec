@@ -25,7 +25,7 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency %q<nokogiri>, ["~> 1.5", ">= 1.5.6"]
   s.add_runtime_dependency %q<blather>, [">= 2.0"]
-  s.add_runtime_dependency %q<activesupport>, [">= 3.0.0", "< 8.0.0"]
+  s.add_runtime_dependency %q<activesupport>, [">= 8.0.0"]
   s.add_runtime_dependency %q<state_machine>, ["~> 1.0"]
   s.add_runtime_dependency %q<future-resource>, ["~> 1.0"]
   s.add_runtime_dependency %q<has-guarded-handlers>, ["~> 1.5"]
