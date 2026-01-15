@@ -23,6 +23,7 @@ module Punchblock
 
     def handle_event(event)
       event.client = self
+      pb_logger.debug "Punchblock client handling event: #{event.class.name} (call_id=#{event.target_call_id}, source=#{event.source&.class&.name || 'none'})"
       if event.source
         event.source.add_event event
       else

@@ -135,6 +135,7 @@ module Punchblock
 
       def handle_presence(p)
         throw :pass unless p.rayo_event?
+        pb_logger.debug "Punchblock receiving XMPP presence from #{p.from}: #{p.inspect}"
         event = p.event
         event.connection = self
         event.domain = p.from.domain
@@ -144,6 +145,7 @@ module Punchblock
         else
           event.target_call_id = p.call_id
         end
+        pb_logger.debug "Punchblock XMPP event parsed: #{event.class.name} for call_id=#{event.target_call_id || event.target_mixer_name}"
         event_handler.call event
       end
 
