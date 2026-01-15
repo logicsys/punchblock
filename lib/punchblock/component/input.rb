@@ -105,6 +105,7 @@ module Punchblock
         end
 
         def rayo_children(root)
+          pb_logger.debug "Punchblock Input::Grammar serializing: url=#{url.inspect}, content_type=#{content_type.inspect}, value_present=#{!value.nil? && !value.to_s.empty?}, value_length=#{value.to_s.length}"
           root.cdata value if value
         end
 

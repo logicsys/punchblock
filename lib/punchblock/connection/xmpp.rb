@@ -45,6 +45,7 @@ module Punchblock
 
       def write(command, **options)
         iq = prep_command_for_execution command, **options
+        pb_logger.debug "Punchblock sending command #{command.class.name} to #{iq.to}: #{iq.to_xml}"
         command.request!
         client.write_with_handler iq do |response|
           if response.result?
@@ -150,11 +151,13 @@ module Punchblock
       end
 
       def handle_iq_result(iq, command)
+        pb_logger.debug "Punchblock received IQ result for #{command.class.name}: #{iq.to_xml}"
         command.response = iq.rayo_node.is_a?(Ref) ? iq.rayo_node : true
       end
 
       def handle_error(iq, command = nil)
         e = Blather::StanzaError.import iq
+        pb_logger.warn "Punchblock received IQ error for #{command&.class&.name}: #{e.name} - #{e.text} (call_id=#{iq.call_id}, component_id=#{iq.component_id})"
         protocol_error = ProtocolError.new.setup e.name, e.text, iq.call_id, iq.component_id
         command.response = protocol_error if command
       end
